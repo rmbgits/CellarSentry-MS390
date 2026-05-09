@@ -3,13 +3,13 @@
 
 [![Platform: Arduino](https://img.shields.io/badge/Platform-Arduino-00979D.svg)](https://www.arduino.cc/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-<img width="1242" height="1656" alt="1-1" src="https://github.com/user-attachments/assets/b122fc91-198a-473b-83aa-408e44794205" />
+<img width="622" height="825" alt="1-1" src="https://github.com/user-attachments/assets/b122fc91-198a-473b-83aa-408e44794205" />
 
 ## 📖 O projekcie
 **CellarSentry-MS390** to zaawansowany system alarmowy zaprojektowany z myślą o ochronie piwnic, garaży i magazynów. W przeciwieństwie do gotowych rozwiązań, projekt ten stawia na ekstremalną siłę rażenia akustycznego przy zachowaniu minimalnego poboru prądu, co pozwala na wielomiesięczną pracę z akumulatora 12V.
 
 Głównym elementem wykonawczym jest **syrena mechaniczna MS-390**, która generuje dźwięk o natężeniu **125dB**. System wykorzystuje unikalną, modulowaną sekwencję dźwiękową, która zwiększa skuteczność odstraszania i zapobiega ignorowaniu sygnału przez otoczenie.
-<img width="622" height="844" alt="1" src="https://github.com/user-attachments/assets/9635f545-9b95-4375-a756-0cb693ac2de5" />
+<img width="322" height="444" alt="1" src="https://github.com/user-attachments/assets/9635f545-9b95-4375-a756-0cb693ac2de5" />
 
 
 ## 🚀 Kluczowe Funkcje
