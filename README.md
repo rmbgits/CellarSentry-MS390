@@ -9,7 +9,7 @@
 **CellarSentry-MS390** to zaawansowany system alarmowy zaprojektowany z myślą o ochronie piwnic, garaży i magazynów. W przeciwieństwie do gotowych rozwiązań, projekt ten stawia na ekstremalną siłę rażenia akustycznego przy zachowaniu minimalnego poboru prądu, co pozwala na wielomiesięczną pracę z akumulatora 12V.
 
 Głównym elementem wykonawczym jest **syrena mechaniczna MS-390**, która generuje dźwięk o natężeniu **125dB**. System wykorzystuje unikalną, modulowaną sekwencję dźwiękową, która zwiększa skuteczność odstraszania i zapobiega ignorowaniu sygnału przez otoczenie.
-<img width="1242" height="1656" alt="1" src="https://github.com/user-attachments/assets/9635f545-9b95-4375-a756-0cb693ac2de5" />
+<img width="622" height="844" alt="1" src="https://github.com/user-attachments/assets/9635f545-9b95-4375-a756-0cb693ac2de5" />
 
 
 ## 🚀 Kluczowe Funkcje
