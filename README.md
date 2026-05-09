@@ -54,5 +54,4 @@ Zasilanie: Akumulator żelowy należy ładować, gdy napięcie spadnie do 12.1V 
 Okablowanie: Ze względu na prąd startowy syreny (ok. 15A), stosuj przewody o przekroju minimum 1.5mm² w obwodzie mocy.
 
 👨‍💻 Autor
-Projekt i kod: [Twoje Imię / Nick]
-Kontakt: [Link do Twojego profilu]
+Projekt i kod:  Rmbgits
