@@ -5,47 +5,47 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## 📖 O projekcie
-**CellarSentry-MS390** to zaawansowany system alarmowy zaprojektowany z myślą o ochronie piwnic, garaży i magazynów. W przeciwieństwie do gotowych rozwiązań, projekt ten stawia na ekstremalną siłę rażenia akustycznego przy zachowaniu minimalnego poboru prądu.
+**CellarSentry-MS390** to zaawansowany system alarmowy zaprojektowany z myślą o ochronie piwnic, garaży i magazynów. W przeciwieństwie do gotowych rozwiązań, projekt ten stawia na ekstremalną siłę rażenia akustycznego przy zachowaniu minimalnego poboru prądu, co pozwala na wielomiesięczną pracę z akumulatora 12V.
 
-Głównym elementem wykonawczym jest **syrena mechaniczna MS-390**, która generuje dźwięk o natężeniu **125dB** – wystarczający, by zmusić intruza do natychmiastowej ucieczki.
+Głównym elementem wykonawczym jest **syrena mechaniczna MS-390**, która generuje dźwięk o natężeniu **125dB**. System wykorzystuje unikalną, modulowaną sekwencję dźwiękową, która zwiększa skuteczność odstraszania i zapobiega ignorowaniu sygnału przez otoczenie.
 
 ## 🚀 Kluczowe Funkcje
-* **Deep Sleep Logic:** Dzięki optymalizacji kodu i sprzętu (usunięcie zbędnych diod LED), układ pobiera w spoczynku poniżej **1mA**.
-* **Mechanical Power:** Wykorzystanie przekaźnika 40A pozwala bezpiecznie sterować silnikiem syreny MS-390.
-* **Entry Delay (30s):** Czas na spokojne opuszczenie pomieszczenia po uzbrojeniu alarmu.
-* **Siren Latch:** Po wyzwoleniu syrena wyje przez zaprogramowany czas (np. 120s), ignorując ponowne zamknięcie drzwi.
-* **Star Grounding:** Profesjonalny układ masy oparty na złączkach WAGO 221, eliminujący zakłócenia od silnika.
+* **Ultra-Low Power:** Pobór prądu w spoczynku to zaledwie **1.1mA** (z przetwornicą i Arduino).
+* **Modulated Siren Sequence:** Inteligentny algorytm sterujący syreną (sekwencja 5-minutowa z różnymi interwałami wycia i krótkimi przerwami).
+* **Smart Status LED:** Wielofunkcyjna dioda informująca o stanie systemu:
+    * *Błysk co 3s:* System uzbrojony (czuwanie).
+    * *Szybki stroboskop:* Procedura alarmowa w toku.
+    * *Błysk co 1s:* Pamięć naruszenia (drzwi były otwarte, alarm zakończył cykl).
+* **Auto-Lockout:** Po wykonaniu pełnej sekwencji 5 cykli syrena milknie, aby chronić akumulator, ale system nadal sygnalizuje naruszenie diodą LED.
+* **Battery Monitor:** Zintegrowany woltomierz cyfrowy aktywowany przyciskiem do szybkiej kontroli stanu naładowania.
 
 ## 🛠️ Lista Komponentów (BOM)
 | Komponent | Model/Parametry | Ilość |
 | :--- | :--- | :--- |
-| Mikrokontroler | Arduino Pro Mini (3.3V / 8MHz) | 1 szt. |
-| Syrena | Mechaniczna MS-390 (12V, 125dB) | 1 szt. |
-| Przekaźnik | DaierTek 40A (z diodą gaszącą) | 1 szt. |
+| Mikrokontroler | Arduino Pro Mini / Nano (3.3V) | 1 szt. |
+| Syrena | Mechaniczna MS-390 (12V, 4.5A, 125dB) | 1 szt. |
+| Przekaźnik | Samochodowy 30A/40A 12V | 1 szt. |
 | Czujnik | Kontaktron magnetyczny | 1 szt. |
-| Zasilanie | Akumulator 12V + Przetwornica Step-Down | 1 kpl. |
-| Sterowanie | Tranzystor NPN (np. BC547) + rezystor 1kΩ | 1 kpl. |
-| Obudowa | Puszka hermetyczna (min. 120x80mm) | 1 szt. |
+| Zasilanie | Akumulator żelowy 12V 7Ah + Przetwornica Step-Down | 1 kpl. |
+| Sterowanie | Tranzystor NPN BC337 + rezystor 1kΩ | 1 kpl. |
+| Monitorowanie | Woltomierz DC + przycisk chwilowy | 1 kpl. |
+| Montaż | Kostki WAGO 221 + Puszka hermetyczna | 1 kpl. |
 
 ## 🔌 Schemat Połączeń
-W projekcie zastosowano separację obwodu logicznego od obwodu mocy:
-1.  **Pin D2:** Wejście czujnika (z wewnętrznym podciąganiem PULLUP).
-2.  **Pin D10:** Wyjście na tranzystor sterujący cewką przekaźnika.
-3.  **Zasilanie:** Przetwornica obniża napięcie z 12V do stabilnego 3.3V dla Arduino.
-4.  **Masa:** Wszystkie minusy schodzą się w jednym punkcie (złączka WAGO).
+System wykorzystuje separację obwodu sterującego od obwodu mocy:
+1. **Pin D2:** Wejście kontaktronu (tryb `INPUT_PULLUP`).
+2. **Pin D10:** Wyjście na bazę tranzystora BC337 (sterowanie przekaźnikiem).
+3. **Pin D13:** Wyjście na diodę sygnalizacyjną LED (3-6V).
+4. **Masa:** Wszystkie punkty GND połączone wspólnie w złączce WAGO (Star Grounding).
+5. **Zasilanie:** 12V z akumulatora obniżone do 3.3V dla zasilania Arduino (Pin VCC).
 
----
-### 📸 Galeria
-*(Tutaj wrzuć zdjęcia swojego gotowego układu)*
-![Widok ogólny](https://via.placeholder.com/600x300?text=Zdjecie+Twojego+Alarmu)
+⚠️ Bezpieczeństwo
+Ochrona słuchu: Podczas testów w piwnicy używaj stoperów/nauszników. 125dB w małym pomieszczeniu jest niebezpieczne.
 
----
+Zasilanie: Akumulator żelowy należy ładować, gdy napięcie spadnie do 12.1V - 12.2V.
 
-## ⚠️ Bezpieczeństwo i Testy
-* **HAŁAS:** MS-390 jest ekstremalnie głośna. Podczas testów w zamkniętych pomieszczeniach używaj ochronników słuchu!
-* **PRĄD:** Syrena przy starcie może pobierać ponad 15A. Wymagany bezpiecznik **20A** oraz kable o przekroju min. **1.5mm²**.
-* **ZAKŁÓCENIA:** Pamiętaj o kondensatorze (470uF) na zasilaniu Arduino, aby zapobiec resetom podczas startu silnika syreny.
+Okablowanie: Ze względu na prąd startowy syreny (ok. 15A), stosuj przewody o przekroju minimum 1.5mm² w obwodzie mocy.
 
-## 👨‍💻 Autor
+👨‍💻 Autor
 Projekt i kod: [Twoje Imię / Nick]
-Kontakt: [Twój email lub link do profilu]
+Kontakt: [Link do Twojego profilu]
