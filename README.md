@@ -46,6 +46,9 @@ System wykorzystuje separację obwodu sterującego od obwodu mocy:
 ⚠️ Bezpieczeństwo
 Ochrona słuchu: Podczas testów w piwnicy używaj stoperów/nauszników. 125dB w małym pomieszczeniu jest niebezpieczne.
 
+Rozbduowa:
+System jest gotowy do podłączenia czegokolwiek na 12V np. trąbki z kompresorem, kable użyte w projekcie przekrój 1.5mm2 maksymalne obciążenie do 20A (bezpiecznik przy akumulatorze)
+
 Zasilanie: Akumulator żelowy należy ładować, gdy napięcie spadnie do 12.1V - 12.2V.
 
 Okablowanie: Ze względu na prąd startowy syreny (ok. 15A), stosuj przewody o przekroju minimum 1.5mm² w obwodzie mocy.
