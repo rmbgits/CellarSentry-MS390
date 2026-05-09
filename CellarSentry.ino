@@ -1,48 +1,65 @@
-/*
- * CellarSentry-MS390
- * Autor: Twój Nick / GitHub
- * Opis: System alarmowy z obsługą syreny mechanicznej.
- */
-
-#include "LowPower.h" // Wymaga zainstalowania biblioteki LowPower
-
-const int PIN_SENSOR = 2;   // Kontaktron
-const int PIN_SIREN  = 10;  // Przekaźnik syreny
-const int ARMING_DELAY = 30; // Czas na wyjście (sekundy)
-const int ALARM_DURATION = 120; // Czas wycia (sekundy)
+// KONFIGURACJA PINÓW
+const int kontaktronPin = 2; 
+const int syrenaPin = 10;    
+const int ledPin = 13;       
 
 void setup() {
-  pinMode(PIN_SENSOR, INPUT_PULLUP);
-  pinMode(PIN_SIREN, OUTPUT);
-  digitalWrite(PIN_SIREN, LOW);
-
-  // Czas na bezpieczne opuszczenie piwnicy
-  for (int i = 0; i < ARMING_DELAY; i++) {
-    delay(1000);
-  }
+  pinMode(kontaktronPin, INPUT_PULLUP);
+  pinMode(syrenaPin, OUTPUT);
+  pinMode(ledPin, OUTPUT);
+  
+  digitalWrite(syrenaPin, LOW);
+  digitalWrite(ledPin, LOW);
 }
 
 void loop() {
-  // Sprawdzenie stanu czujnika
-  if (digitalRead(PIN_SENSOR) == HIGH) {
-    triggerAlarm();
-  }
+  // 1. BŁYSK KONTROLNY (Oszczędne "czuwanie")
+  digitalWrite(ledPin, HIGH); 
+  delay(15);
+  digitalWrite(ledPin, LOW);
 
-  // Uśpienie procesora na 1 sekundę w celu oszczędzania energii
-  // Po przebudzeniu pętla loop rusza od nowa
-  LowPower.powerDown(SLEEP_1S, ADC_OFF, BOD_OFF); 
+  // 2. SPRAWDZANIE DRZWI (przez 3 sekundy)
+  for (int i = 0; i < 30; i++) {
+    if (digitalRead(kontaktronPin) == HIGH) { 
+      uruchomPelnyAlarm(); 
+    }
+    delay(100); 
+  }
 }
 
-void triggerAlarm() {
-  digitalWrite(PIN_SIREN, HIGH); // Start bestii MS-390
-  
-  // Syrena wyje przez określony czas
-  for (int i = 0; i < ALARM_DURATION; i++) {
-    delay(1000);
+void uruchomPelnyAlarm() {
+  for (int cykl = 0; cykl < 5; cykl++) {
+    // TWOJA MODULOWANA MELODIA Z SZYBKIM MIGANIEM DIODY:
+    wyjZMiganiem(15000);  cisza(2000); 
+    wyjZMiganiem(10000);  cisza(500);  
+    wyjZMiganiem(10000);  cisza(1000); 
+    wyjZMiganiem(20000);  cisza(2000); 
   }
 
-  digitalWrite(PIN_SIREN, LOW); // Wyłączenie (syrena będzie jeszcze chwilę zwalniać)
+  // BLOKADA PO 5 CYKLACH
+  while(digitalRead(kontaktronPin) == HIGH) {
+    digitalWrite(syrenaPin, LOW); 
+    // Dioda mruga powoli w trybie blokady (ostrzeżenie)
+    digitalWrite(ledPin, HIGH); delay(50); digitalWrite(ledPin, LOW);
+    delay(1000); 
+  }
+}
+
+// NOWA FUNKCJA: Wycie syreny + bardzo szybkie miganie diody (stroboskop)
+void wyjZMiganiem(int ms) {
+  unsigned long startT = millis();
+  digitalWrite(syrenaPin, HIGH); // Włącz syrenę
   
-  // Krótka zwłoka po alarmie przed ponownym uzbrojeniem
-  delay(5000); 
+  while (millis() - startT < ms) {
+    digitalWrite(ledPin, HIGH);
+    delay(50);  // Szybki błysk
+    digitalWrite(ledPin, LOW);
+    delay(50);  // Szybka przerwa
+  }
+}
+
+void cisza(int ms) {
+  digitalWrite(syrenaPin, LOW);
+  digitalWrite(ledPin, LOW); // Dioda też milczy w przerwie
+  delay(ms);
 }
