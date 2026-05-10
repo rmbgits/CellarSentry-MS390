@@ -1,7 +1,10 @@
 // KONFIGURACJA PINÓW
 const int kontaktronPin = 2; 
 const int syrenaPin = 10;    
-const int ledPin = 13;       
+const int ledPin = 9; // PRZEPIĘTE Z 13 NA 9 (PWM)
+
+// USTAWIENIA JASNOŚCI I CZASU
+const int jasnoscDiodny = 6; // Wartość od 1 do 255
 
 void setup() {
   pinMode(kontaktronPin, INPUT_PULLUP);
@@ -9,57 +12,68 @@ void setup() {
   pinMode(ledPin, OUTPUT);
   
   digitalWrite(syrenaPin, LOW);
-  digitalWrite(ledPin, LOW);
+  analogWrite(ledPin, 0);
 }
 
 void loop() {
-  // 1. BŁYSK KONTROLNY (Oszczędne "czuwanie")
-  digitalWrite(ledPin, HIGH); 
-  delay(15);
-  digitalWrite(ledPin, LOW);
+  // 1. BŁYSK KONTROLNY (Czuwanie)
+  analogWrite(ledPin, jasnoscDiodny); 
+  delay(30);
+  analogWrite(ledPin, 0);
 
-  // 2. SPRAWDZANIE DRZWI (przez 3 sekundy)
+  // 2. SPRAWDZANIE DRZWI
   for (int i = 0; i < 30; i++) {
     if (digitalRead(kontaktronPin) == HIGH) { 
+      proceduraOstrzegawcza(); 
       uruchomPelnyAlarm(); 
     }
     delay(100); 
   }
 }
 
+void proceduraOstrzegawcza() {
+  // CZAS NA REAKCJĘ (ok. 3.7 sekundy)
+  for (int i = 0; i < 17; i++) {
+    analogWrite(ledPin, 3); 
+    delay(110);
+    analogWrite(ledPin, 0);
+    delay(110);
+  }
+}
+
 void uruchomPelnyAlarm() {
-  for (int cykl = 0; cykl < 5; cykl++) {
-    // TWOJA MODULOWANA MELODIA Z SZYBKIM MIGANIEM DIODY:
-    wyjZMiganiem(15000);  cisza(2000); 
-    wyjZMiganiem(10000);  cisza(500);  
-    wyjZMiganiem(10000);  cisza(1000); 
-    wyjZMiganiem(20000);  cisza(2000); 
+  // 2 CYKLE PO 40 SEKUND WYCIA = ŁĄCZNIE 1m 20s
+  for (int cykl = 0; cykl < 2; cykl++) {
+    
+    // ZMODYFIKOWANA MELODIA (Suma wycia w cyklu = 40s):
+    wyjZMiganiem(10000);  cisza(2000); // 10s wycia
+    wyjZMiganiem(10000);  cisza(500);  // 10s wycia
+    wyjZMiganiem(5000);   cisza(1000); // 5s wycia
+    wyjZMiganiem(15000);  cisza(2000); // 15s wycia
   }
 
-  // BLOKADA PO 5 CYKLACH
+  // BLOKADA POALARMOWA
   while(digitalRead(kontaktronPin) == HIGH) {
     digitalWrite(syrenaPin, LOW); 
-    // Dioda mruga powoli w trybie blokady (ostrzeżenie)
-    digitalWrite(ledPin, HIGH); delay(50); digitalWrite(ledPin, LOW);
+    analogWrite(ledPin, 30); delay(50); analogWrite(ledPin, 0);
     delay(1000); 
   }
 }
 
-// NOWA FUNKCJA: Wycie syreny + bardzo szybkie miganie diody (stroboskop)
 void wyjZMiganiem(int ms) {
   unsigned long startT = millis();
-  digitalWrite(syrenaPin, HIGH); // Włącz syrenę
+  digitalWrite(syrenaPin, HIGH); 
   
   while (millis() - startT < ms) {
-    digitalWrite(ledPin, HIGH);
-    delay(50);  // Szybki błysk
-    digitalWrite(ledPin, LOW);
-    delay(50);  // Szybka przerwa
+    analogWrite(ledPin, 4); 
+    delay(50);
+    analogWrite(ledPin, 0);
+    delay(50);
   }
 }
 
 void cisza(int ms) {
   digitalWrite(syrenaPin, LOW);
-  digitalWrite(ledPin, LOW); // Dioda też milczy w przerwie
+  analogWrite(ledPin, 0);
   delay(ms);
 }
